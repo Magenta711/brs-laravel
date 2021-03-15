@@ -12,5 +12,15 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('buyers');
 });
+
+Route::get('buyers',function ()
+{
+    return view('buyers');
+})->name('buyers');
+
+Route::get('tickets',function ()
+{
+    return view('tickets');
+})->name('tickets');

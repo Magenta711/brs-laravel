@@ -27,7 +27,7 @@ class Ticket extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function types(): HasMany
+    public function types()
     {
         return $this->hasMany(TicketType::class, 'ticket_id', 'id');
     }
