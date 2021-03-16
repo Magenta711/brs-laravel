@@ -77942,32 +77942,30 @@ var Tickets = /*#__PURE__*/function (_Component) {
 
               case 3:
                 res = _context.sent;
-                console.log('Res', res);
-                _context.next = 7;
-                return res.json;
+                _context.next = 6;
+                return res;
 
-              case 7:
+              case 6:
                 data = _context.sent;
-                console.log(data);
                 this.setState({
-                  tickets: data.tickets
+                  tickets: data
                 });
-                _context.next = 15;
+                _context.next = 13;
                 break;
 
-              case 12:
-                _context.prev = 12;
+              case 10:
+                _context.prev = 10;
                 _context.t0 = _context["catch"](0);
                 this.setState({
                   error: _context.t0
                 });
 
-              case 15:
+              case 13:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 12]]);
+        }, _callee, this, [[0, 10]]);
       }));
 
       function componentDidMount() {

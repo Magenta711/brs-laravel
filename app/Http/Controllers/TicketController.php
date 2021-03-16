@@ -15,8 +15,8 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::get();
-
+        $tickets = Ticket::with('types')->get();
+        
         return response()->json($tickets,200);
     }
 

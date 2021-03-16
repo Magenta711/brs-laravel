@@ -12,7 +12,7 @@ class Ticket extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'date_time', 'address',
+        'name', 'date_time', 'address','status'
     ];
 
     /**

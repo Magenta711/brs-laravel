@@ -36,12 +36,10 @@ export class Tickets extends Component {
 
     async componentDidMount (){
         try {
-            let res = await fetch( 'http://trs.test/api/ticket');
-            console.log('Res',res);
-            let data = await res.json;
-            console.log(data);
+            let res = await fetch('http://trs.test/api/ticket');
+            let data = await res;
             this.setState({
-                tickets: data.tickets
+                tickets: data
             })
         } catch (error) {
             this.setState({

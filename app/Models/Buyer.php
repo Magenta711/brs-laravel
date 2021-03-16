@@ -27,7 +27,7 @@ class Buyer extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function tikes(): HasMany
+    public function tickets()
     {
         return $this->hasMany(BuyerHasTicket::class, 'buyer_id', 'id');
     }

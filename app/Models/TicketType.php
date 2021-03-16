@@ -27,8 +27,8 @@ class TicketType extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function ticket(): HasOne
+    public function ticket()
     {
-        return $this->hasOne(Ticket::class, 'ticket_id', 'id');
+        return $this->hasOne(Ticket::class,'id','ticket_id');
     }
 }
