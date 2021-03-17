@@ -18,7 +18,7 @@
                                 {{$ticket->name}}
                             </div>
                             <div class="col-md-4">
-                                {{$ticket->date_time}}
+                                {{$ticket->date_timen}}
                             </div>
                             <div class="col-auto">
                                 <button  type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#typeTicketModal_{{$buyer->id}}_{{$ticket->id}}">

@@ -13,11 +13,16 @@ class TicketController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function index()
+    // {
+    //     $tickets = Ticket::with('types')->get();
+        
+    //     return response()->json($tickets,200);
+    // }
     public function index()
     {
         $tickets = Ticket::with('types')->get();
-        
-        return response()->json($tickets,200);
+        return view('tickets',['tickets' => $tickets]);
     }
 
     /**
@@ -25,9 +30,21 @@ class TicketController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function add_type(Request $request,Ticket $id)
     {
-        //
+        $request->validate([
+            'type' => ['required'],
+            'amount' => ['required'],
+            'value' => ['required'],
+        ]);
+    
+        $id->types()->create([
+            'type' => $request->type,
+            'amount' => $request->amount,
+            'value' => $request->value,
+        ]);
+    
+        return redirect()->route('tickets')->with('success','Added ticket type to '.$id->name);
     }
 
     /**
@@ -36,6 +53,27 @@ class TicketController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => ['required','integer','max:255'],
+    //         'date_time' => ['required'],
+    //         'address' => ['required','max:255','string'],
+    //     ]);
+
+    //     $ticket = Ticket::create($request->all());
+
+    //     foreach ($request->types as $key => $value) {
+    //         TicketType::create([
+    //             'ticket_id' => $ticket->id,
+    //             'type' => $request->type[$key],
+    //             'amount' => $request->amount[$key],
+    //             'value' => $request->value[$key],
+    //         ]);
+    //     }
+        
+    //     return response()->json($ticket,200);
+    // }
     public function store(Request $request)
     {
         $request->validate([
@@ -43,19 +81,10 @@ class TicketController extends Controller
             'date_time' => ['required'],
             'address' => ['required','max:255','string'],
         ]);
-
-        $ticket = Ticket::create($request->all());
-
-        foreach ($request->types as $key => $value) {
-            TicketType::create([
-                'ticket_id' => $ticket->id,
-                'type' => $request->type[$key],
-                'amount' => $request->amount[$key],
-                'value' => $request->value[$key],
-            ]);
-        }
         
-        return response()->json($ticket,200);
+        $tickets = Ticket::create($request->all());
+        
+        return redirect()->route('tickets')->with('success','Ticket has been saved');
     }
 
     /**

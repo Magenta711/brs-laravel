@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Buyer;
+use App\Models\Ticket;
 
 class BuyerController extends Controller
 {
@@ -13,11 +14,26 @@ class BuyerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function index()
+    // {
+    //     $buyers = Buyer::with('tikes')->get();
+
+    //     return response()->json($buyers,200);
+    // }
     public function index()
     {
-        $buyers = Buyer::with('tikes')->get();
-
-        return response()->json($buyers,200);
+        $tickets = Ticket::with('types')->where('status',1)->get();
+        $buyers = Buyer::with(['tickets' => function ($query)
+        {
+            $query->with(['ticket' => function ($query)
+            {
+                $query->with('ticket');
+            }]);
+        }])->get();
+        return view('buyers', [
+            'buyers' => $buyers,
+            'tickets' => $tickets,
+        ]);
     }
 
     /**
@@ -25,9 +41,37 @@ class BuyerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function add_tickets(Request $request, Buyer $id)
     {
-        //
+        $request->validate([
+            'ticket_type_id' => ['required','integer'],
+            'amount' => ['required','integer'],
+        ]);
+    
+        $type = TicketType::find($request->ticket_type_id);
+    
+        $amount = $type->amount - $request->amount;
+    
+        if ($amount >= 0) {
+            $type->update([
+                'amount' => $amount
+            ]);
+    
+            if ($amount == 0) {
+                $type->ticket()->update([
+                    'status' => 0,
+                ]);
+            }
+            
+            $data = $id->tickets()->create([
+                'ticket_type_id' => $request->ticket_type_id,
+                'amount' => $request->amount,
+            ]);
+        
+            return redirect()->route('buyers')->with('success','Ticket(s) has been reserved to the buyer');
+        }
+    
+        return redirect()->back()->withErrors(['amount' => 'The amount is not valid']);
     }
 
     /**
@@ -36,17 +80,27 @@ class BuyerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'id_card' => ['required','integer','max:15','min:7','unique:buyers,id'],
+    //         'name' => ['required','string','max:50'],
+    //         'email' => ['required','max:255','string','email','unique:buyers,email'],
+    //     ]);
+
+    //     $buyer = Buyer::create($request->all());
+
+    //     return response()->json($buyer,200);
+    // }
     public function store(Request $request)
     {
         $request->validate([
-            'id_card' => ['required','integer','max:15','min:7','unique:buyers,id'],
+            'id_card' => ['required','integer','min:7','unique:buyers,id'],
             'name' => ['required','string','max:50'],
             'email' => ['required','max:255','string','email','unique:buyers,email'],
         ]);
-
-        $buyer = Buyer::create($request->all());
-
-        return response()->json($buyer,200);
+        $tickets = Buyer::create($request->all());
+        return redirect()->route('buyers')->with('success','Buyer has been saved');
     }
 
     /**

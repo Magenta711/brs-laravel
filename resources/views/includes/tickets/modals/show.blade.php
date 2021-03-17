@@ -1,8 +1,8 @@
-<div class="modal fade" id="showModal_{{$buyer->id}}" tabindex="-1" aria-labelledby="showModalLabel_{{$buyer->id}}" aria-hidden="true">
+<div class="modal fade" id="showModal_{{$ticket->id}}" tabindex="-1" aria-labelledby="showModalLabel_{{$ticket->id}}" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="showModalLabel_{{$buyer->id}}">{{$buyer->name}}</h5>
+                <h5 class="modal-title" id="showModalLabel_{{$ticket->id}}">{{$ticket->name}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -14,19 +14,17 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <td>Ticket</td>
                                 <td>Type</td>
                                 <td>Amount</td>
-                                <td>Total</td>
+                                <td>Value</td>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($buyer->tickets as $item)
+                            @forelse ($ticket->types as $item)
                                 <tr>
-                                    <td>{{$item->ticket->ticket->name}}</td>
-                                    <td>{{$item->ticket->type}}</td>
-                                    <td>{{$item->amount}}</td>
-                                    <td>$ {{number_format($item->amount * $item->ticket->value,2,',','.')}}</td>
+                                    <td>{{$item->type}}</td>
+                                    <td>{{$item->amount == 0 ? 'Sold out' : $item->amount }}</td>
+                                    <td>{{$item->value}}</td>
                                 </tr>
                             @empty
                                 <tr>
